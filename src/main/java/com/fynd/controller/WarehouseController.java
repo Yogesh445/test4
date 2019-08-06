@@ -56,6 +56,13 @@ public class WarehouseController {
         return new ResponseEntity<>(this.warehouseService.checkCapacity(warehouseName), HttpStatus.OK);
     }
 
+    /**
+     * Find the Items associate with the warehouse
+     * @param itemId
+     * @return
+     * @throws WarehouseDoesNotHaveSpace
+     * @throws WarehouseNotFoundException
+     */
     @RequestMapping(method = RequestMethod.GET, value = "/findItem")
     public ResponseEntity<?> findItem(@RequestParam("itemId") Long itemId) throws WarehouseDoesNotHaveSpace, WarehouseNotFoundException {
         return new ResponseEntity<>(this.warehouseService.findItem(itemId), HttpStatus.OK);
