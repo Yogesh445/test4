@@ -20,10 +20,24 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class WarehouseController {
     final WarehouseService warehouseService;
 
+    /**
+     * First API to execute and insert the capacity of warehouse
+     *
+     * @param warehouseRequest
+     * @return: Warehouse
+     */
     @RequestMapping(method = RequestMethod.POST, value = "/addCapacity")
     public ResponseEntity<?> addCapacity(@RequestBody WarehouseRequest warehouseRequest) {
         return new ResponseEntity<>(this.warehouseService.addWarehouseCapacity(warehouseRequest), HttpStatus.OK);
     }
+
+    /**
+     * Second API to insert the data into the warehouse.
+     * @param warehouseItemRequest
+     * @return
+     * @throws WarehouseDoesNotHaveSpace
+     * @throws WarehouseNotFoundException
+     */
     @RequestMapping(method = RequestMethod.POST, value = "/addItem")
     public ResponseEntity<?> addItem(@RequestBody WarehouseItemRequest warehouseItemRequest) throws WarehouseDoesNotHaveSpace, WarehouseNotFoundException {
         return new ResponseEntity<>(this.warehouseService.addItem(warehouseItemRequest), HttpStatus.OK);
