@@ -1,5 +1,6 @@
 package com.fynd.controller;
 
+import com.fynd.exception.WarehouseAlreadyPresentException;
 import com.fynd.exception.WarehouseDoesNotHaveSpace;
 import com.fynd.exception.WarehouseNotFoundException;
 import com.fynd.request.WarehouseItemRequest;
@@ -27,7 +28,7 @@ public class WarehouseController {
      * @return: Warehouse
      */
     @RequestMapping(method = RequestMethod.POST, value = "/addCapacity")
-    public ResponseEntity<?> addCapacity(@RequestBody WarehouseRequest warehouseRequest) {
+    public ResponseEntity<?> addCapacity(@RequestBody WarehouseRequest warehouseRequest) throws WarehouseAlreadyPresentException {
         return new ResponseEntity<>(this.warehouseService.addWarehouseCapacity(warehouseRequest), HttpStatus.OK);
     }
 
@@ -43,6 +44,13 @@ public class WarehouseController {
         return new ResponseEntity<>(this.warehouseService.addItem(warehouseItemRequest), HttpStatus.OK);
     }
 
+    /**
+     * Check the Capacity of warehouse .
+     * @param warehouseName
+     * @return
+     * @throws WarehouseDoesNotHaveSpace
+     * @throws WarehouseNotFoundException
+     */
     @RequestMapping(method = RequestMethod.GET, value = "/checkCapacityWithItemList")
     public ResponseEntity<?> checkCapacity(@RequestParam("warehouseName") String warehouseName) throws WarehouseDoesNotHaveSpace, WarehouseNotFoundException {
         return new ResponseEntity<>(this.warehouseService.checkCapacity(warehouseName), HttpStatus.OK);

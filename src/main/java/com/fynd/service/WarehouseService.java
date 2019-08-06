@@ -2,6 +2,7 @@ package com.fynd.service;
 
 import com.fynd.entity.Warehouse;
 import com.fynd.entity.WarehouseItems;
+import com.fynd.exception.WarehouseAlreadyPresentException;
 import com.fynd.exception.WarehouseDoesNotHaveSpace;
 import com.fynd.exception.WarehouseNotFoundException;
 import com.fynd.mapper.WarehouseItemsMapper;
@@ -28,9 +29,16 @@ public class WarehouseService {
     final WarehouseItemsMapper warehouseItemsMapper;
     final WarehouseItemsRepository warehouseItemsRepository;
 
-    public Warehouse addWarehouseCapacity(WarehouseRequest request) {
+    public Warehouse addWarehouseCapacity(WarehouseRequest request) throws WarehouseAlreadyPresentException {
+        Warehouse existingWarehouse = warehouseRepository.findByName(request.getName());
+        if(existingWarehouse!=null){
+            String errorMsg = String.format("Warehouse with name %s is already registered.Please changes the name.", request.getName());
+            throw new WarehouseAlreadyPresentException(errorMsg);
+        }
+
         Warehouse warehouse = warehouseMapper.getWarehouse(request);
         warehouse.setId((long) Math.random() * 1000000000000L);
+
         return warehouseRepository.save(warehouse);
     }
 
